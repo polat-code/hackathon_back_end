@@ -1,0 +1,33 @@
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      username: admin
+      password: password
+      database: webApp
+      port: 27018 # change this
+      host: localhost
+      auto-index-creation: true
+
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: iytechli.email@gmail.com
+    password: wcvl scii jroc riil
+    port: 587
+    protocol: smtp
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: false
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+  server:
+    port: 8080
+
