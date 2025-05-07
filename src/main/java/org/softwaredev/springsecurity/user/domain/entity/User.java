@@ -1,17 +1,22 @@
 package org.softwaredev.springsecurity.user.domain.entity;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.softwaredev.springsecurity.common.domain.entity.Auditable;
+import org.softwaredev.springsecurity.user.userSetting.domain.entity.UserSetting;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Document("_users")
 @Data
@@ -24,16 +29,17 @@ public class User extends Auditable implements UserDetails {
 
   @Id private String id;
 
-  private String name;
-  private String surname;
+  @NotBlank private String name;
+  @NotBlank private String surname;
 
-  private String email;
-  private String password;
+  @NotBlank @Email private String email;
+  @NotBlank private String password;
 
-  private List<Permission> permissions;
+  @NotNull private List<Permission> permissions;
 
-  private Role role;
+  @NotNull private Role role;
 
+  @DBRef(lazy = true)
   private UserSetting userSetting;
 
   @Override

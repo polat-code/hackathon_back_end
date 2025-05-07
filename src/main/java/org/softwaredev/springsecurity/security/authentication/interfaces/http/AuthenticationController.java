@@ -1,10 +1,10 @@
 package org.softwaredev.springsecurity.security.authentication.interfaces.http;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.softwaredev.springsecurity.common.domain.http.ApiResponse;
 import org.softwaredev.springsecurity.security.authentication.application.AuthenticationService;
-import org.softwaredev.springsecurity.security.authentication.domain.http.RegisterRequest;
-import org.softwaredev.springsecurity.security.authentication.domain.http.RegisterResponse;
+import org.softwaredev.springsecurity.security.authentication.domain.http.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +23,15 @@ public class AuthenticationController {
         return authenticationService.register(registerRequest);
     }
 
-    //@PostMapping("/email-validation")
+  @PostMapping("/email-validation")
+  public ResponseEntity<ApiResponse<EmailValidationResponse>> validateOTP(
+      @RequestBody @Valid EmailValidationRequest emailValidationRequest) {
+    return authenticationService.validateEmail(emailValidationRequest);
+  }
+
+  @PostMapping("/login")
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody @Valid LoginRequest loginRequest) {
+        return authenticationService.login(loginRequest);
+  }
 
 }
