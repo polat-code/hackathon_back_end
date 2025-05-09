@@ -68,6 +68,24 @@ public class AuthenticationControllerAdvice {
         HttpStatus.OK);
   }
 
+  @ExceptionHandler(InvalidAccessTokenException.class)
+  public ResponseEntity<ApiResponse<String>> invalidAccessTokenException(
+      InvalidAccessTokenException ex, WebRequest request) {
+    return new ResponseEntity<>(
+        new ApiResponse<>(
+            "Error", ex.getMessage(), ErrorCodes.UNAUTHORIZED.getErrorCode(), false, new Date()),
+        HttpStatus.OK);
+  }
+
+  @ExceptionHandler(CustomExpiredJwtException.class)
+  public ResponseEntity<ApiResponse<String>> customExpiredJwtException(
+      CustomExpiredJwtException ex, WebRequest request) {
+    return new ResponseEntity<>(
+        new ApiResponse<>(
+            "Error", ex.getMessage(), ErrorCodes.EXPIRED.getErrorCode(), false, new Date()),
+        HttpStatus.OK);
+  }
+
   @ExceptionHandler(AuthenticationException.class)
   public ResponseEntity<ApiResponse<String>> authenticationException(
           AuthenticationException ex, WebRequest request) {
@@ -81,4 +99,12 @@ public class AuthenticationControllerAdvice {
             HttpStatus.OK);
   }
 
+  @ExceptionHandler(CustomJwtException.class)
+  public ResponseEntity<ApiResponse<String>> customJwtException(
+      CustomJwtException ex, WebRequest request) {
+    return new ResponseEntity<>(
+        new ApiResponse<>(
+            "Error", ex.getMessage(), ErrorCodes.UNAUTHORIZED.getErrorCode(), false, new Date()),
+        HttpStatus.OK);
+  }
 }

@@ -7,6 +7,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,10 @@ public class JWTService {
 
     @Value("${application.security.jwt.refresh_token.refresh_secret_key}")
     private String refreshSecretKey;
+
+    public String extractEmailFromHeader(HttpHeaders httpHeader) {
+        return extractUsernameFromAccessToken(httpHeader.get("Authorization").get(0).replace("Bearer ", ""));
+    }
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);

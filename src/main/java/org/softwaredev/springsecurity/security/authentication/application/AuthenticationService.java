@@ -1,5 +1,7 @@
 package org.softwaredev.springsecurity.security.authentication.application;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,11 +19,11 @@ import org.softwaredev.springsecurity.user.domain.entity.User;
 import org.softwaredev.springsecurity.user.repository.UserRepository;
 import org.softwaredev.springsecurity.user.userSetting.application.UserSettingService;
 import org.softwaredev.springsecurity.user.userSetting.domain.entity.UserSetting;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -134,5 +136,23 @@ public class AuthenticationService {
         new ApiResponse<>(
             LoginResponse.builder().accessToken(token).build(), "success", 200, true, new Date()),
         HttpStatus.OK);
+  }
+
+  public ResponseEntity<ApiResponse<String>> validateAccessToken(HttpHeaders httpHeaders) {
+    try {
+      String email = jwtService.extractEmailFromHeader(httpHeaders);
+      Optional<User> optionalUser = userService.findOptionalByEmail(email);
+      if (optionalUser.isPresent()) {
+        return new ResponseEntity<>(
+            new ApiResponse<>("Valid Access Token", "success", 200, true, new Date()),
+            HttpStatus.OK);
+      }
+      throw new InvalidAccessTokenException("Invalid Access Token");
+
+    } catch (ExpiredJwtException exception) {
+      throw new CustomExpiredJwtException("Expired JWT");
+    } catch (JwtException exception) {
+      throw new CustomJwtException("Invalid JWT");
+    }
   }
 }
