@@ -53,7 +53,7 @@ public class AuthenticationService {
             .surname(registerRequest.surname())
             .password(passwordEncoder.encode(registerRequest.password()))
             .email(registerRequest.email())
-            .role(Role.USER)
+            .role(Role.EMPLOYEE)
             .permissions(new ArrayList<>())
             .createdAt(new Date())
             .lastModifiedAt(new Date())

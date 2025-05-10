@@ -1,15 +1,16 @@
 package org.softwaredev.springsecurity.user.domain.entity;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.softwaredev.springsecurity.common.domain.entity.Auditable;
+import org.softwaredev.springsecurity.employeePosition.domain.domain.EmployeePosition;
 import org.softwaredev.springsecurity.user.userSetting.domain.entity.UserSetting;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -37,7 +38,13 @@ public class User extends Auditable implements UserDetails {
 
   @NotNull private List<Permission> permissions;
 
+  private Date employeeStartDate;
+
   @NotNull private Role role;
+
+  @DBRef(lazy = true)
+  @NotNull
+  private EmployeePosition employeePosition;
 
   @DBRef(lazy = true)
   private UserSetting userSetting;

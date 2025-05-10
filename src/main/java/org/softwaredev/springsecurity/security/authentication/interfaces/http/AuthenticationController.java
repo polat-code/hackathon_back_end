@@ -37,4 +37,5 @@ public class AuthenticationController {
         return authenticationService.validateAccessToken(httpHeaders);
     }
 
+
 }
