@@ -1,10 +1,12 @@
 package org.softwaredev.springsecurity.security.authentication.interfaces.http;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.softwaredev.springsecurity.common.domain.http.ApiResponse;
 import org.softwaredev.springsecurity.security.authentication.application.AuthenticationService;
 import org.softwaredev.springsecurity.security.authentication.domain.http.*;
+import org.softwaredev.springsecurity.user.domain.entity.User;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +45,10 @@ public class AuthenticationController {
         return authenticationService.validateAccessToken(httpHeaders);
     }
 
+    @GetMapping("/detail")
+    public ResponseEntity<ApiResponse<UserDetailResponse>> getUserDetailResponse(HttpServletRequest request) {
+        User user = (User) request.getAttribute("user");
+        return authenticationService.getUserDetailResponse(user);
+    }
 
 }

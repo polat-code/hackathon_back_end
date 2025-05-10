@@ -25,4 +25,6 @@ public class UserService {
   public Optional<User> findOptionalByEmail(String email) {
     return userRepository.findByEmail(email);
   }
+
+
 }

@@ -21,6 +21,10 @@ application:
     otp:
       otp_expiration: 120000 # 2 minutes
 
+logging:
+  file:
+    path: myapp.log
+
 
 
 

@@ -212,4 +212,9 @@ public class AuthenticationService {
       List<RegisterRequest> registerRequest) {
     return null;
   }
+
+  public ResponseEntity<ApiResponse<UserDetailResponse>> getUserDetailResponse(User user) {
+
+    return null;
+  }
 }
