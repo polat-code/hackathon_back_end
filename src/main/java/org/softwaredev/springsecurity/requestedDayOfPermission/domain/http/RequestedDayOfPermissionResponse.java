@@ -5,4 +5,10 @@ import org.softwaredev.springsecurity.reviewedPermission.domain.entity.Permissio
 
 @Builder
 public record RequestedDayOfPermissionResponse(
-        String id, String createdAt, String from, String to, String description, PermissionStatus permissionStatus) {}
+    String id,
+    String from,
+    String to,
+    Integer duration,
+    String reason,
+    String requestedOn,
+    PermissionStatus permissionStatus) {}
