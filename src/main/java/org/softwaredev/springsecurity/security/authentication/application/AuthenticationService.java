@@ -3,18 +3,22 @@ package org.softwaredev.springsecurity.security.authentication.application;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.validation.Valid;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 import lombok.RequiredArgsConstructor;
+import org.softwaredev.springsecurity.common.application.DateTimeUtilService;
 import org.softwaredev.springsecurity.common.application.EmailService;
 import org.softwaredev.springsecurity.common.application.OTPService;
 import org.softwaredev.springsecurity.common.domain.http.ApiResponse;
+import org.softwaredev.springsecurity.employeePosition.application.EmployeePositionService;
+import org.softwaredev.springsecurity.employeePosition.domain.domain.EmployeePosition;
+import org.softwaredev.springsecurity.requestedDayOfPermission.domain.entity.RequestedDayOfPermission;
+import org.softwaredev.springsecurity.requestedDayOfPermission.repository.RequestedDayOfPermissionsRepository;
+import org.softwaredev.springsecurity.reviewedPermission.domain.entity.PermissionStatus;
+import org.softwaredev.springsecurity.reviewedPermission.domain.entity.ReviewedPermission;
+import org.softwaredev.springsecurity.reviewedPermission.repository.ReviewedPermissionRepository;
 import org.softwaredev.springsecurity.security.authentication.domain.http.*;
 import org.softwaredev.springsecurity.security.authentication.exceptions.*;
 import org.softwaredev.springsecurity.user.application.UserService;
-import org.softwaredev.springsecurity.user.domain.entity.Role;
 import org.softwaredev.springsecurity.user.domain.entity.User;
 import org.softwaredev.springsecurity.user.repository.UserRepository;
 import org.softwaredev.springsecurity.user.userSetting.application.UserSettingService;
@@ -39,6 +43,10 @@ public class AuthenticationService {
   private final JWTService jwtService;
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationManager authenticationManager;
+  private final DateTimeUtilService dateTimeUtilService;
+  private final RequestedDayOfPermissionsRepository requestedDayOfPermissionsRepository;
+  private final ReviewedPermissionRepository reviewedPermissionRepository;
+  private final EmployeePositionService employeePositionService;
 
   public ResponseEntity<ApiResponse<RegisterResponse>> register(RegisterRequest registerRequest) {
     Optional<User> optionalUser = userRepository.findByEmail(registerRequest.email());
@@ -47,32 +55,76 @@ public class AuthenticationService {
           "That email " + registerRequest.email() + " is already registered");
     }
 
+    EmployeePosition employeePosition =
+        employeePositionService.findById(registerRequest.employeePositionId());
+
     User user =
         User.builder()
             .name(registerRequest.name())
             .surname(registerRequest.surname())
             .password(passwordEncoder.encode(registerRequest.password()))
             .email(registerRequest.email())
-            .role(Role.EMPLOYEE)
+            .role(registerRequest.role())
             .permissions(new ArrayList<>())
+            .employeeStartDate(
+                dateTimeUtilService.convertOnlyDateToDateObject(
+                    registerRequest.employeeStartDate()))
+            .employeePosition(employeePosition)
             .createdAt(new Date())
             .lastModifiedAt(new Date())
             .build();
 
     // TODO Send OTP Email to User
-    String otp = otpService.createOTP();
-    emailService.sendOTP(user, otp);
+    // String otp = otpService.createOTP();
+    // emailService.sendOTP(user, otp);
 
     UserSetting userSetting =
-        UserSetting.builder().otp(otp).emailVerified(false).otpCreatedTime(new Date()).build();
+        UserSetting.builder()
+            // .otp(otp)
+            .emailVerified(true)
+            // .otpCreatedTime(new Date())
+            .build();
     userSetting = userSettingService.saveUserSetting(userSetting);
 
     user.setUserSetting(userSetting);
     user = userRepository.save(user);
 
+    RequestedDayOfPermission requestedDayOfPermission =
+        RequestedDayOfPermission.builder()
+            .createdAt(
+                dateTimeUtilService.convertOnlyDateToDateObject(
+                    registerRequest.requestedDayOfPermissionRequest().createdAt()))
+            .from(
+                dateTimeUtilService.convertOnlyDateToDateObject(
+                    registerRequest.requestedDayOfPermissionRequest().from()))
+            .to(
+                dateTimeUtilService.convertOnlyDateToDateObject(
+                    registerRequest.requestedDayOfPermissionRequest().to()))
+            .user(user)
+            .description(registerRequest.requestedDayOfPermissionRequest().description())
+            .build();
+
+    requestedDayOfPermission = requestedDayOfPermissionsRepository.save(requestedDayOfPermission);
+
+    List<RequestedDayOfPermission> requestedDayOfPermissions = new ArrayList<>();
+    requestedDayOfPermissions.add(requestedDayOfPermission);
+    // Create reviewed
+    ReviewedPermission reviewedPermission =
+        ReviewedPermission.builder()
+            .user(user)
+            .requestedDayOfPermissions(requestedDayOfPermissions)
+            .status(PermissionStatus.PENDING)
+            .usage(registerRequest.reviewedPermissionRequest().usage())
+            .remaining(registerRequest.reviewedPermissionRequest().remaining())
+            .createdAt(new Date())
+            .lastModifiedAt(new Date())
+            .build();
+
+    reviewedPermission = reviewedPermissionRepository.save(reviewedPermission);
+
     return new ResponseEntity<>(
         new ApiResponse<>(
-            RegisterResponse.builder().message("Email Validation").build(),
+            RegisterResponse.builder().message("User Created").build(),
             "success",
             200,
             true,

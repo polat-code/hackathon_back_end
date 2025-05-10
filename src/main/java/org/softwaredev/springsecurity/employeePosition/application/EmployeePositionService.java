@@ -2,6 +2,7 @@ package org.softwaredev.springsecurity.employeePosition.application;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.softwaredev.springsecurity.common.domain.http.ApiResponse;
@@ -9,6 +10,7 @@ import org.softwaredev.springsecurity.department.application.DepartmentService;
 import org.softwaredev.springsecurity.department.domain.entity.Department;
 import org.softwaredev.springsecurity.employeePosition.domain.domain.EmployeePosition;
 import org.softwaredev.springsecurity.employeePosition.domain.http.CreatingEmployeePositionRequest;
+import org.softwaredev.springsecurity.employeePosition.exceptions.EmployeePositionNotFoundException;
 import org.softwaredev.springsecurity.employeePosition.repository.EmployeePositionRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,5 +44,13 @@ public class EmployeePositionService {
     employeePositionRepository.saveAll(employeePositions);
     return new ResponseEntity<>(
         new ApiResponse<>(employeePositions, "success", 200, true, new Date()), HttpStatus.OK);
+  }
+
+  public EmployeePosition findById(String id) {
+    Optional<EmployeePosition> optionalEmployeePosition = employeePositionRepository.findById(id);
+    if (optionalEmployeePosition.isEmpty()) {
+      throw new EmployeePositionNotFoundException("Employee Not Found");
+    }
+    return optionalEmployeePosition.get();
   }
 }

@@ -33,6 +33,6 @@ public class ReviewedPermission extends Auditable {
 
   private PermissionStatus status;
 
-  private Long usage;
-  private Long remaining;
+  private Integer usage;
+  private Integer remaining;
 }
