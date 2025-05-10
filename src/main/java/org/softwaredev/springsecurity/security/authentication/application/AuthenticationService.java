@@ -207,4 +207,9 @@ public class AuthenticationService {
       throw new CustomJwtException("Invalid JWT");
     }
   }
+
+  public ResponseEntity<ApiResponse<List<RegisterResponse>>> multipleRegister(
+      List<RegisterRequest> registerRequest) {
+    return null;
+  }
 }

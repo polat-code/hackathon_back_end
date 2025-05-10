@@ -9,6 +9,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
@@ -19,6 +21,10 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<RegisterResponse>> register(@RequestBody RegisterRequest registerRequest) {
         return authenticationService.register(registerRequest);
+    }
+    @PostMapping("/register-multiple")
+    public ResponseEntity<ApiResponse<List<RegisterResponse>>> multipleRegister(@RequestBody List<RegisterRequest> registerRequest) {
+        return authenticationService.multipleRegister(registerRequest);
     }
 
   @PostMapping("/email-validation")
