@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.softwaredev.springsecurity.common.application.DateTimeUtilService;
@@ -12,7 +13,10 @@ import org.softwaredev.springsecurity.common.application.MongoUtilService;
 import org.softwaredev.springsecurity.common.domain.http.ApiResponse;
 import org.softwaredev.springsecurity.requestedDayOfPermission.domain.entity.RequestedDayOfPermission;
 import org.softwaredev.springsecurity.requestedDayOfPermission.domain.http.AnalyzedRequestedDayOfPermissionResponse;
+import org.softwaredev.springsecurity.requestedDayOfPermission.domain.http.BehaveRequest;
+import org.softwaredev.springsecurity.requestedDayOfPermission.domain.http.BehaveResponse;
 import org.softwaredev.springsecurity.requestedDayOfPermission.domain.http.RequestedDayOfPermissionResponse;
+import org.softwaredev.springsecurity.requestedDayOfPermission.exceptions.RequestedDayOfPermissionException;
 import org.softwaredev.springsecurity.requestedDayOfPermission.repository.RequestedDayOfPermissionsRepository;
 import org.softwaredev.springsecurity.reviewedPermission.application.ReviewedPermissionService;
 import org.softwaredev.springsecurity.reviewedPermission.domain.entity.PermissionStatus;
@@ -132,6 +136,32 @@ public class RequestedDayOfPermissionService {
 
   public static long daysBetweenInclusive(Date from, Date to) {
     return daysBetween(from, to) + 1;
+  }
+
+  public ResponseEntity<ApiResponse<BehaveResponse>> behaveRequestedPermission(
+      BehaveRequest behaveRequest) {
+    RequestedDayOfPermission requestedDayOfPermission = findById(behaveRequest);
+    requestedDayOfPermission.setStatus(behaveRequest.status());
+
+    requestedDayOfPermissionsRepository.save(requestedDayOfPermission);
+
+    return new ResponseEntity<>(
+        new ApiResponse<>(
+            BehaveResponse.builder().status(requestedDayOfPermission.getStatus()).build(),
+            "success",
+            200,
+            true,
+            new Date()),
+        HttpStatus.OK);
+  }
+
+  public RequestedDayOfPermission findById(BehaveRequest behaveRequest) {
+    Optional<RequestedDayOfPermission> requestedDayOfPermission =
+        requestedDayOfPermissionsRepository.findById(behaveRequest.requestedDayOfPermissionId());
+    if (requestedDayOfPermission.isEmpty()) {
+      throw new RequestedDayOfPermissionException("requested day of permission not found");
+    }
+    return requestedDayOfPermission.get();
   }
 
   private class PermissionResult {

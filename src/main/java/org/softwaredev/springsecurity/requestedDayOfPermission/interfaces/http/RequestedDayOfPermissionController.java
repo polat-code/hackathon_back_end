@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.softwaredev.springsecurity.common.domain.http.ApiResponse;
 import org.softwaredev.springsecurity.requestedDayOfPermission.application.RequestedDayOfPermissionService;
 import org.softwaredev.springsecurity.requestedDayOfPermission.domain.http.AnalyzedRequestedDayOfPermissionResponse;
+import org.softwaredev.springsecurity.requestedDayOfPermission.domain.http.BehaveRequest;
+import org.softwaredev.springsecurity.requestedDayOfPermission.domain.http.BehaveResponse;
 import org.softwaredev.springsecurity.requestedDayOfPermission.domain.http.RequestedDayOfPermissionResponse;
 import org.softwaredev.springsecurity.security.authentication.domain.http.RequestedDayOfPermissionRequest;
 import org.softwaredev.springsecurity.user.domain.entity.User;
@@ -35,8 +37,11 @@ public class RequestedDayOfPermissionController {
   public ResponseEntity<ApiResponse<List<AnalyzedRequestedDayOfPermissionResponse>>>
       getAllAnalyzedRequestedDayOfPermissions() {
       return requestedDayOfPermissionService.getAllAnalyzedRequestedDayOfPermissions();
-
   }
 
-
+  @PostMapping("/behave")
+  public ResponseEntity<ApiResponse<BehaveResponse>> behaveRequestedPermission(
+      @RequestBody BehaveRequest behaveRequest) {
+    return requestedDayOfPermissionService.behaveRequestedPermission(behaveRequest);
+  }
 }
