@@ -23,6 +23,7 @@ public class EmployeePosition  extends Auditable {
     private String id;
 
     private String name;
+
     @DBRef(lazy = true)
     private Department department;
 }

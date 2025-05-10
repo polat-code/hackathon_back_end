@@ -2,11 +2,13 @@ package org.softwaredev.springsecurity.department.application;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.softwaredev.springsecurity.common.domain.http.ApiResponse;
 import org.softwaredev.springsecurity.department.domain.entity.Department;
 import org.softwaredev.springsecurity.department.domain.http.CreatingDepartmentRequest;
+import org.softwaredev.springsecurity.department.exceptions.DepartmentNotFoundException;
 import org.softwaredev.springsecurity.department.repository.DepartmentRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +37,13 @@ public class DepartmentService {
 
     return new ResponseEntity<>(
         new ApiResponse<>(departments, "success", 200, true, new Date()), HttpStatus.OK);
+  }
+
+  public Department findById(String id) {
+    Optional<Department> department = departmentRepository.findById(id);
+    if (department.isEmpty()) {
+      throw new DepartmentNotFoundException("");
+    }
+    return department.get();
   }
 }
