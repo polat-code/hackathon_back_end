@@ -101,6 +101,7 @@ public class AuthenticationService {
                 dateTimeUtilService.convertOnlyDateToDateObject(
                     registerRequest.requestedDayOfPermissionRequest().to()))
             .user(user)
+            .status(PermissionStatus.PENDING)
             .description(registerRequest.requestedDayOfPermissionRequest().description())
             .build();
 
@@ -113,7 +114,6 @@ public class AuthenticationService {
         ReviewedPermission.builder()
             .user(user)
             .requestedDayOfPermissions(requestedDayOfPermissions)
-            .status(PermissionStatus.PENDING)
             .usage(registerRequest.reviewedPermissionRequest().usage())
             .remaining(registerRequest.reviewedPermissionRequest().remaining())
             .createdAt(new Date())

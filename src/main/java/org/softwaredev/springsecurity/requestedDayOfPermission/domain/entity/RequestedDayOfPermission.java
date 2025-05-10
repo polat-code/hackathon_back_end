@@ -4,6 +4,7 @@ import java.util.Date;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.softwaredev.springsecurity.common.domain.entity.Auditable;
+import org.softwaredev.springsecurity.reviewedPermission.domain.entity.PermissionStatus;
 import org.softwaredev.springsecurity.user.domain.entity.User;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -30,4 +31,6 @@ public class RequestedDayOfPermission extends Auditable {
   private User user;
 
   private String description;
+
+  private PermissionStatus status;
 }

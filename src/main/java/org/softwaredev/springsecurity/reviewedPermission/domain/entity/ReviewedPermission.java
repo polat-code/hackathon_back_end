@@ -31,8 +31,6 @@ public class ReviewedPermission extends Auditable {
   @DBRef(lazy = true)
   private List<RequestedDayOfPermission> requestedDayOfPermissions;
 
-  private PermissionStatus status;
-
   private Integer usage;
   private Integer remaining;
 }

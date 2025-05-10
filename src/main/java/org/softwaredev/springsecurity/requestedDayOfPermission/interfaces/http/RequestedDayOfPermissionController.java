@@ -4,15 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.softwaredev.springsecurity.common.domain.http.ApiResponse;
 import org.softwaredev.springsecurity.requestedDayOfPermission.application.RequestedDayOfPermissionService;
-import org.softwaredev.springsecurity.requestedDayOfPermission.domain.entity.RequestedDayOfPermission;
 import org.softwaredev.springsecurity.requestedDayOfPermission.domain.http.RequestedDayOfPermissionResponse;
 import org.softwaredev.springsecurity.security.authentication.domain.http.RequestedDayOfPermissionRequest;
 import org.softwaredev.springsecurity.user.domain.entity.User;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,4 +25,17 @@ public class RequestedDayOfPermissionController {
       User user = (User) request.getAttribute("user");
       return requestedDayOfPermissionService.createRequestedDayOfPermission(requestedDayOfPermission,user);
   }
+
+  @GetMapping("/all")
+  public ResponseEntity<ApiResponse<List<RequestedDayOfPermissionResponse>>> getAllRequestedDayOfPerm() {
+      return requestedDayOfPermissionService.getAllRequestedDayOfPerm();
+  }
+
+    /*
+  @GetMapping("")
+    public ResponseEntity<ApiResponse<List<AnalyzedRequestedDayOfPermissionResponse>>> getAllAnalyzedRequestedDayOfPermissions() {
+      return requestedDayOfPermissionService.getAllAnalyzedRequestedDayOfPermissions();
+  }
+
+     */
 }
