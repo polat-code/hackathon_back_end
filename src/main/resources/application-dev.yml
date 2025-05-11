@@ -3,9 +3,9 @@ spring:
     mongodb:
       authentication-database: admin
       username: admin
-      password: 8uhE2PNhl2IA21gfasw  #   password
+      password: password   #    8uhE2PNhl2IA21gfasw
       database: webApp
-      port: 27017 # change this
+      port: 27018 # change this
       host: localhost
       auto-index-creation: true
 

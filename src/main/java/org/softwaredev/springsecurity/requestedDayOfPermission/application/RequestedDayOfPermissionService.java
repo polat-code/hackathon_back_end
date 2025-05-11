@@ -127,14 +127,25 @@ public class RequestedDayOfPermissionService {
                               dateTimeUtilService.convertDateToLocalDate(
                                   requestedDayOfPermission.getCreatedAt(), "Europe/Istanbul"))
                           .position(
-                              requestedDayOfPermission.getUser().getEmployeePosition() != null ? requestedDayOfPermission.getUser().getEmployeePosition().getName() : "")
-                          .department(requestedDayOfPermission.getUser().getEmployeePosition() != null ?
-                                  requestedDayOfPermission
-                                  .getUser()
-                                  .getEmployeePosition()
-                                  .getDepartment()
-                                  .getDepartmentName() : "")
+                              requestedDayOfPermission.getUser().getEmployeePosition() != null
+                                  ? requestedDayOfPermission
+                                      .getUser()
+                                      .getEmployeePosition()
+                                      .getName()
+                                  : "")
+                          .department(
+                              requestedDayOfPermission.getUser().getEmployeePosition() != null
+                                  ? requestedDayOfPermission
+                                      .getUser()
+                                      .getEmployeePosition()
+                                      .getDepartment()
+                                      .getDepartmentName()
+                                  : "")
                           .userId(requestedDayOfPermission.getUser().getId())
+                          .fullName(
+                              requestedDayOfPermission.getUser().getName()
+                                  + " "
+                                  + requestedDayOfPermission.getUser().getUsername())
                           .build();
 
                   return requestedDayOfPermissionResponse;

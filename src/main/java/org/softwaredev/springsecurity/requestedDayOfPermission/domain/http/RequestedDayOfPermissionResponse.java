@@ -16,7 +16,8 @@ public record RequestedDayOfPermissionResponse(
     String startedDay,
     String position,
     String department,
-    String userId) {}
+    String userId,
+    String fullName) {}
 
 
 // Kalan izin
