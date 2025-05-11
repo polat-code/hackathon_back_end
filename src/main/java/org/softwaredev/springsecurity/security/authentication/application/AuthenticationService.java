@@ -19,6 +19,7 @@ import org.softwaredev.springsecurity.reviewedPermission.repository.ReviewedPerm
 import org.softwaredev.springsecurity.security.authentication.domain.http.*;
 import org.softwaredev.springsecurity.security.authentication.exceptions.*;
 import org.softwaredev.springsecurity.user.application.UserService;
+import org.softwaredev.springsecurity.user.domain.entity.Role;
 import org.softwaredev.springsecurity.user.domain.entity.User;
 import org.softwaredev.springsecurity.user.repository.UserRepository;
 import org.softwaredev.springsecurity.user.userSetting.application.UserSettingService;
@@ -186,7 +187,14 @@ public class AuthenticationService {
 
     return new ResponseEntity<>(
         new ApiResponse<>(
-            LoginResponse.builder().accessToken(token).build(), "success", 200, true, new Date()),
+            LoginResponse.builder()
+                .accessToken(token)
+                .userRole(user.getRole().equals(Role.EMPLOYEE) ? "USER" : "ADMIN")
+                .build(),
+            "success",
+            200,
+            true,
+            new Date()),
         HttpStatus.OK);
   }
 
