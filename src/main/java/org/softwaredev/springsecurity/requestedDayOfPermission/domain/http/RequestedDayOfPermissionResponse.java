@@ -11,4 +11,12 @@ public record RequestedDayOfPermissionResponse(
     Integer duration,
     String reason,
     String requestedOn,
-    PermissionStatus permissionStatus) {}
+    PermissionStatus permissionStatus,
+    int remainingDay,
+    String startedDay,
+    String position) {}
+
+
+// Kalan izin
+// işe başlama tarihi
+// pozisyon

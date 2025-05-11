@@ -95,25 +95,37 @@ public class RequestedDayOfPermissionService {
     List<RequestedDayOfPermissionResponse> requestedDayOfPermissionResponses =
         requestedDayOfPermissions.stream()
             .map(
-                requestedDayOfPermission ->
-                    RequestedDayOfPermissionResponse.builder()
-                        .id(requestedDayOfPermission.getId())
-                        .requestedOn(
-                            dateTimeUtilService.convertDateToLocalDate(
-                                requestedDayOfPermission.getCreatedAt(), "Europe/Istanbul"))
-                        .from(
-                            dateTimeUtilService.convertDateToLocalDate(
-                                requestedDayOfPermission.getFrom(), "Europe/Istanbul"))
-                        .to(
-                            dateTimeUtilService.convertDateToLocalDate(
-                                requestedDayOfPermission.getTo(), "Europe/Istanbul"))
-                        .permissionStatus(requestedDayOfPermission.getStatus())
-                        .reason(requestedDayOfPermission.getDescription())
-                        .duration(
-                            getDurationBetweenTwoDates(
-                                requestedDayOfPermission.getFrom(),
-                                requestedDayOfPermission.getTo()))
-                        .build())
+                requestedDayOfPermission -> {
+                  ReviewedPermission reviewedPermission =
+                      reviewedPermissionService.findByUser(requestedDayOfPermission.getUser());
+                  RequestedDayOfPermissionResponse requestedDayOfPermissionResponse =
+                      RequestedDayOfPermissionResponse.builder()
+                          .id(requestedDayOfPermission.getId())
+                          .requestedOn(
+                              dateTimeUtilService.convertDateToLocalDate(
+                                  requestedDayOfPermission.getCreatedAt(), "Europe/Istanbul"))
+                          .from(
+                              dateTimeUtilService.convertDateToLocalDate(
+                                  requestedDayOfPermission.getFrom(), "Europe/Istanbul"))
+                          .to(
+                              dateTimeUtilService.convertDateToLocalDate(
+                                  requestedDayOfPermission.getTo(), "Europe/Istanbul"))
+                          .permissionStatus(requestedDayOfPermission.getStatus())
+                          .reason(requestedDayOfPermission.getDescription())
+                          .duration(
+                              getDurationBetweenTwoDates(
+                                  requestedDayOfPermission.getFrom(),
+                                  requestedDayOfPermission.getTo()))
+                          .remainingDay(reviewedPermission.getRemaining())
+                          .startedDay(
+                              dateTimeUtilService.convertDateToLocalDate(
+                                  requestedDayOfPermission.getCreatedAt(), "Europe/Istanbul"))
+                          .position(
+                              requestedDayOfPermission.getUser().getEmployeePosition().getName())
+                          .build();
+
+                  return requestedDayOfPermissionResponse;
+                })
             .collect(Collectors.toList());
 
     return new ResponseEntity<>(
