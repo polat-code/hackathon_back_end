@@ -145,7 +145,7 @@ public class RequestedDayOfPermissionService {
                           .fullName(
                               requestedDayOfPermission.getUser().getName()
                                   + " "
-                                  + requestedDayOfPermission.getUser().getUsername())
+                                  + requestedDayOfPermission.getUser().getSurname())
                           .build();
 
                   return requestedDayOfPermissionResponse;
