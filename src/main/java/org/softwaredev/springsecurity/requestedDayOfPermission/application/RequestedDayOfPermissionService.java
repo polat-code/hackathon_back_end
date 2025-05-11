@@ -128,12 +128,12 @@ public class RequestedDayOfPermissionService {
                                   requestedDayOfPermission.getCreatedAt(), "Europe/Istanbul"))
                           .position(
                               requestedDayOfPermission.getUser().getEmployeePosition() != null ? requestedDayOfPermission.getUser().getEmployeePosition().getName() : "")
-                          .department(
-                              requestedDayOfPermission
+                          .department(requestedDayOfPermission.getUser().getEmployeePosition() != null ?
+                                  requestedDayOfPermission
                                   .getUser()
                                   .getEmployeePosition()
                                   .getDepartment()
-                                  .getDepartmentName())
+                                  .getDepartmentName() : "")
                           .userId(requestedDayOfPermission.getUser().getId())
                           .build();
 
