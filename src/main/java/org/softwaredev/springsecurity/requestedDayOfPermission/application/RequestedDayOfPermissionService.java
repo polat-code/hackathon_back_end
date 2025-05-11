@@ -127,7 +127,7 @@ public class RequestedDayOfPermissionService {
                               dateTimeUtilService.convertDateToLocalDate(
                                   requestedDayOfPermission.getCreatedAt(), "Europe/Istanbul"))
                           .position(
-                              requestedDayOfPermission.getUser().getEmployeePosition().getName())
+                              requestedDayOfPermission.getUser().getEmployeePosition() != null ? requestedDayOfPermission.getUser().getEmployeePosition().getName() : "")
                           .department(
                               requestedDayOfPermission
                                   .getUser()
