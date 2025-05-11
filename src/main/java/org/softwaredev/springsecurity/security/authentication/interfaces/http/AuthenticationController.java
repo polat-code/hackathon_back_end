@@ -45,10 +45,6 @@ public class AuthenticationController {
         return authenticationService.validateAccessToken(httpHeaders);
     }
 
-    @GetMapping("/detail")
-    public ResponseEntity<ApiResponse<UserDetailResponse>> getUserDetailResponse(HttpServletRequest request) {
-        User user = (User) request.getAttribute("user");
-        return authenticationService.getUserDetailResponse(user);
-    }
+
 
 }

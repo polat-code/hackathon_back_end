@@ -223,6 +223,16 @@ public class AuthenticationService {
 
   public ResponseEntity<ApiResponse<UserDetailResponse>> getUserDetailResponse(User user) {
 
-    return null;
+    return new ResponseEntity<>(
+        new ApiResponse<>(
+            UserDetailResponse.builder()
+                .fullName(user.getName() + " " + user.getSurname())
+                .role(user.getRole().equals(Role.EMPLOYEE) ? "USER" : "ADMIN")
+                .build(),
+            "success",
+            200,
+            true,
+            new Date()),
+        HttpStatus.OK);
   }
 }
