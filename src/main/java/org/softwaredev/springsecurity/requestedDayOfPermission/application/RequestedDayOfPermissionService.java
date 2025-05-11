@@ -92,6 +92,12 @@ public class RequestedDayOfPermissionService {
       getAllRequestedDayOfPerm() {
     List<RequestedDayOfPermission> requestedDayOfPermissions =
         requestedDayOfPermissionsRepository.findAll();
+    return getRequestedDayOfPermissionsResponseEntity(requestedDayOfPermissions);
+  }
+
+  private ResponseEntity<ApiResponse<List<RequestedDayOfPermissionResponse>>>
+      getRequestedDayOfPermissionsResponseEntity(
+          List<RequestedDayOfPermission> requestedDayOfPermissions) {
     List<RequestedDayOfPermissionResponse> requestedDayOfPermissionResponses =
         requestedDayOfPermissions.stream()
             .map(
@@ -174,6 +180,14 @@ public class RequestedDayOfPermissionService {
       throw new RequestedDayOfPermissionException("requested day of permission not found");
     }
     return requestedDayOfPermission.get();
+  }
+
+  public ResponseEntity<ApiResponse<List<RequestedDayOfPermissionResponse>>>
+      getAllRequestedDayOfPermByUser(User user) {
+    List<RequestedDayOfPermission> requestedDayOfPermissions =
+        requestedDayOfPermissionsRepository.findAllByUser(user);
+
+    return getRequestedDayOfPermissionsResponseEntity(requestedDayOfPermissions);
   }
 
   private class PermissionResult {

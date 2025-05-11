@@ -33,6 +33,12 @@ public class RequestedDayOfPermissionController {
       return requestedDayOfPermissionService.getAllRequestedDayOfPerm();
   }
 
+    @GetMapping("/all-user")
+    public ResponseEntity<ApiResponse<List<RequestedDayOfPermissionResponse>>> getAllRequestedDayOfPermByUser(HttpServletRequest request) {
+        User user = (User) request.getAttribute("user");
+        return requestedDayOfPermissionService.getAllRequestedDayOfPermByUser(user);
+    }
+
   @GetMapping("/analyze")
   public ResponseEntity<ApiResponse<List<AnalyzedRequestedDayOfPermissionResponse>>>
       getAllAnalyzedRequestedDayOfPermissions() {
