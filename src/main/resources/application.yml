@@ -13,7 +13,7 @@ application:
     jwt:
       access_token:
         access_secret_key: 5a53e4n092071c05042b200047b9ay0b0c8a081040b4c98016e3e3238af50090e123d6aa9aiaa7e3a9cc68t82dafctye13f781r6459d6du2c4d4p511718179109z
-        expiration: 28800000  # 8 hours 28800000
+        expiration: 86400000  # 24 hours 86400000
 
       refresh_token:
         refresh_secret_key: 5a5364f092073c05042b200047k9ad0b0c8a081040b4c98016e3e3238af50090e123d6aa9afaa7e3a9cc68b22dafcaere13f781r6459d6dv2c4d4o59b738179109z
