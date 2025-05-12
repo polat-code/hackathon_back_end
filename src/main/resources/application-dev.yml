@@ -3,7 +3,7 @@ spring:
     mongodb:
       authentication-database: admin
       username: admin
-      password: 8uhE2PNhl2IA21gfasw  #   password
+      password: password
       database: webApp
       port: 27017 # change this
       host: localhost
